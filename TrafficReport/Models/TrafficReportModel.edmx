@@ -1,0 +1,344 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="TrafficReportModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tblLocationNames">
+          <Key>
+            <PropertyRef Name="lnID" />
+          </Key>
+          <Property Name="lnID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="lnLocationName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="lnRegion" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="lnLat" Type="float" />
+          <Property Name="lnLng" Type="float" />
+        </EntityType>
+        <EntityType Name="tblRainfalls">
+          <Key>
+            <PropertyRef Name="rfID" />
+          </Key>
+          <Property Name="rfID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="rfDate" Type="datetime" Nullable="false" />
+          <Property Name="rfLocation" Type="int" Nullable="false" />
+          <Property Name="rfValue" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblRoadNames">
+          <Key>
+            <PropertyRef Name="rnID" />
+          </Key>
+          <Property Name="rnID" Type="int" Nullable="false" />
+          <Property Name="rnRoadName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="rnLocation" Type="int" />
+          <Property Name="rnSpeedLimit" Type="int" />
+        </EntityType>
+        <EntityType Name="tblTrafficAccidents">
+          <Key>
+            <PropertyRef Name="taID" />
+          </Key>
+          <Property Name="taID" Type="int" Nullable="false" />
+          <Property Name="taDateTime" Type="datetime" Nullable="false" />
+          <Property Name="taRoadName" Type="int" />
+          <Property Name="taLat" Type="float" />
+          <Property Name="taLong" Type="float" />
+          <Property Name="taDescription" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="tblTrafficSpeeds">
+          <Key>
+            <PropertyRef Name="tsID" />
+          </Key>
+          <Property Name="tsID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="tsDateTime" Type="datetime" Nullable="false" />
+          <Property Name="tsRoadName" Type="int" />
+          <Property Name="tsMinSpeed" Type="int" />
+          <Property Name="tsMaxSpeed" Type="int" />
+        </EntityType>
+        <Association Name="FK_tblRainfall_tblLocationName">
+          <End Role="tblLocationNames" Type="Self.tblLocationNames" Multiplicity="1" />
+          <End Role="tblRainfalls" Type="Self.tblRainfalls" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblLocationNames">
+              <PropertyRef Name="lnID" />
+            </Principal>
+            <Dependent Role="tblRainfalls">
+              <PropertyRef Name="rfLocation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblRoadName_tblLocationName">
+          <End Role="tblLocationNames" Type="Self.tblLocationNames" Multiplicity="0..1" />
+          <End Role="tblRoadNames" Type="Self.tblRoadNames" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblLocationNames">
+              <PropertyRef Name="lnID" />
+            </Principal>
+            <Dependent Role="tblRoadNames">
+              <PropertyRef Name="rnLocation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblTrafficAccident_tblRoadName">
+          <End Role="tblRoadNames" Type="Self.tblRoadNames" Multiplicity="0..1" />
+          <End Role="tblTrafficAccidents" Type="Self.tblTrafficAccidents" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblRoadNames">
+              <PropertyRef Name="rnID" />
+            </Principal>
+            <Dependent Role="tblTrafficAccidents">
+              <PropertyRef Name="taRoadName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblTrafficSpeed_tblRoadName">
+          <End Role="tblRoadNames" Type="Self.tblRoadNames" Multiplicity="0..1" />
+          <End Role="tblTrafficSpeeds" Type="Self.tblTrafficSpeeds" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblRoadNames">
+              <PropertyRef Name="rnID" />
+            </Principal>
+            <Dependent Role="tblTrafficSpeeds">
+              <PropertyRef Name="tsRoadName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TrafficReportModelStoreContainer">
+          <EntitySet Name="tblLocationNames" EntityType="Self.tblLocationNames" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblRainfalls" EntityType="Self.tblRainfalls" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblRoadNames" EntityType="Self.tblRoadNames" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblTrafficAccidents" EntityType="Self.tblTrafficAccidents" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblTrafficSpeeds" EntityType="Self.tblTrafficSpeeds" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_tblRainfall_tblLocationName" Association="Self.FK_tblRainfall_tblLocationName">
+            <End Role="tblLocationNames" EntitySet="tblLocationNames" />
+            <End Role="tblRainfalls" EntitySet="tblRainfalls" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblRoadName_tblLocationName" Association="Self.FK_tblRoadName_tblLocationName">
+            <End Role="tblLocationNames" EntitySet="tblLocationNames" />
+            <End Role="tblRoadNames" EntitySet="tblRoadNames" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblTrafficAccident_tblRoadName" Association="Self.FK_tblTrafficAccident_tblRoadName">
+            <End Role="tblRoadNames" EntitySet="tblRoadNames" />
+            <End Role="tblTrafficAccidents" EntitySet="tblTrafficAccidents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblTrafficSpeed_tblRoadName" Association="Self.FK_tblTrafficSpeed_tblRoadName">
+            <End Role="tblRoadNames" EntitySet="tblRoadNames" />
+            <End Role="tblTrafficSpeeds" EntitySet="tblTrafficSpeeds" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TrafficReportModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tblLocationName">
+          <Key>
+            <PropertyRef Name="lnID" />
+          </Key>
+          <Property Name="lnID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="lnLocationName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="lnRegion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="lnLat" Type="Double" />
+          <Property Name="lnLng" Type="Double" />
+          <NavigationProperty Name="tblRainfalls" Relationship="Self.FK_tblRainfall_tblLocationName" FromRole="tblLocationNames" ToRole="tblRainfalls" />
+          <NavigationProperty Name="tblRoadNames" Relationship="Self.FK_tblRoadName_tblLocationName" FromRole="tblLocationNames" ToRole="tblRoadNames" />
+        </EntityType>
+        <EntityType Name="tblRainfall">
+          <Key>
+            <PropertyRef Name="rfID" />
+          </Key>
+          <Property Name="rfID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="rfDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="rfLocation" Type="Int32" Nullable="false" />
+          <Property Name="rfValue" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <NavigationProperty Name="tblLocationName" Relationship="Self.FK_tblRainfall_tblLocationName" FromRole="tblRainfalls" ToRole="tblLocationNames" />
+        </EntityType>
+        <EntityType Name="tblRoadName">
+          <Key>
+            <PropertyRef Name="rnID" />
+          </Key>
+          <Property Name="rnID" Type="Int32" Nullable="false" />
+          <Property Name="rnRoadName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="rnLocation" Type="Int32" />
+          <Property Name="rnSpeedLimit" Type="Int32" />
+          <NavigationProperty Name="tblLocationName" Relationship="Self.FK_tblRoadName_tblLocationName" FromRole="tblRoadNames" ToRole="tblLocationNames" />
+          <NavigationProperty Name="tblTrafficAccidents" Relationship="Self.FK_tblTrafficAccident_tblRoadName" FromRole="tblRoadNames" ToRole="tblTrafficAccidents" />
+          <NavigationProperty Name="tblTrafficSpeeds" Relationship="Self.FK_tblTrafficSpeed_tblRoadName" FromRole="tblRoadNames" ToRole="tblTrafficSpeeds" />
+        </EntityType>
+        <EntityType Name="tblTrafficAccident">
+          <Key>
+            <PropertyRef Name="taID" />
+          </Key>
+          <Property Name="taID" Type="Int32" Nullable="false" />
+          <Property Name="taDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="taRoadName" Type="Int32" />
+          <Property Name="taLat" Type="Double" />
+          <Property Name="taLong" Type="Double" />
+          <Property Name="taDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblRoadName" Relationship="Self.FK_tblTrafficAccident_tblRoadName" FromRole="tblTrafficAccidents" ToRole="tblRoadNames" />
+        </EntityType>
+        <EntityType Name="tblTrafficSpeed">
+          <Key>
+            <PropertyRef Name="tsID" />
+          </Key>
+          <Property Name="tsID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="tsDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="tsRoadName" Type="Int32" />
+          <Property Name="tsMinSpeed" Type="Int32" />
+          <Property Name="tsMaxSpeed" Type="Int32" />
+          <NavigationProperty Name="tblRoadName" Relationship="Self.FK_tblTrafficSpeed_tblRoadName" FromRole="tblTrafficSpeeds" ToRole="tblRoadNames" />
+        </EntityType>
+        <Association Name="FK_tblRainfall_tblLocationName">
+          <End Role="tblLocationNames" Type="Self.tblLocationName" Multiplicity="1" />
+          <End Role="tblRainfalls" Type="Self.tblRainfall" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblLocationNames">
+              <PropertyRef Name="lnID" />
+            </Principal>
+            <Dependent Role="tblRainfalls">
+              <PropertyRef Name="rfLocation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblRoadName_tblLocationName">
+          <End Role="tblLocationNames" Type="Self.tblLocationName" Multiplicity="0..1" />
+          <End Role="tblRoadNames" Type="Self.tblRoadName" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblLocationNames">
+              <PropertyRef Name="lnID" />
+            </Principal>
+            <Dependent Role="tblRoadNames">
+              <PropertyRef Name="rnLocation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblTrafficAccident_tblRoadName">
+          <End Role="tblRoadNames" Type="Self.tblRoadName" Multiplicity="0..1" />
+          <End Role="tblTrafficAccidents" Type="Self.tblTrafficAccident" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblRoadNames">
+              <PropertyRef Name="rnID" />
+            </Principal>
+            <Dependent Role="tblTrafficAccidents">
+              <PropertyRef Name="taRoadName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblTrafficSpeed_tblRoadName">
+          <End Role="tblRoadNames" Type="Self.tblRoadName" Multiplicity="0..1" />
+          <End Role="tblTrafficSpeeds" Type="Self.tblTrafficSpeed" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblRoadNames">
+              <PropertyRef Name="rnID" />
+            </Principal>
+            <Dependent Role="tblTrafficSpeeds">
+              <PropertyRef Name="tsRoadName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TrafficReportDataEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tblLocationNames" EntityType="Self.tblLocationName" />
+          <EntitySet Name="tblRainfalls" EntityType="Self.tblRainfall" />
+          <EntitySet Name="tblRoadNames" EntityType="Self.tblRoadName" />
+          <EntitySet Name="tblTrafficAccidents" EntityType="Self.tblTrafficAccident" />
+          <EntitySet Name="tblTrafficSpeeds" EntityType="Self.tblTrafficSpeed" />
+          <AssociationSet Name="FK_tblRainfall_tblLocationName" Association="Self.FK_tblRainfall_tblLocationName">
+            <End Role="tblLocationNames" EntitySet="tblLocationNames" />
+            <End Role="tblRainfalls" EntitySet="tblRainfalls" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblRoadName_tblLocationName" Association="Self.FK_tblRoadName_tblLocationName">
+            <End Role="tblLocationNames" EntitySet="tblLocationNames" />
+            <End Role="tblRoadNames" EntitySet="tblRoadNames" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblTrafficAccident_tblRoadName" Association="Self.FK_tblTrafficAccident_tblRoadName">
+            <End Role="tblRoadNames" EntitySet="tblRoadNames" />
+            <End Role="tblTrafficAccidents" EntitySet="tblTrafficAccidents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblTrafficSpeed_tblRoadName" Association="Self.FK_tblTrafficSpeed_tblRoadName">
+            <End Role="tblRoadNames" EntitySet="tblRoadNames" />
+            <End Role="tblTrafficSpeeds" EntitySet="tblTrafficSpeeds" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TrafficReportModelStoreContainer" CdmEntityContainer="TrafficReportDataEntities">
+          <EntitySetMapping Name="tblLocationNames">
+            <EntityTypeMapping TypeName="TrafficReportModel.tblLocationName">
+              <MappingFragment StoreEntitySet="tblLocationNames">
+                <ScalarProperty Name="lnID" ColumnName="lnID" />
+                <ScalarProperty Name="lnLocationName" ColumnName="lnLocationName" />
+                <ScalarProperty Name="lnRegion" ColumnName="lnRegion" />
+                <ScalarProperty Name="lnLat" ColumnName="lnLat" />
+                <ScalarProperty Name="lnLng" ColumnName="lnLng" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblRainfalls">
+            <EntityTypeMapping TypeName="TrafficReportModel.tblRainfall">
+              <MappingFragment StoreEntitySet="tblRainfalls">
+                <ScalarProperty Name="rfID" ColumnName="rfID" />
+                <ScalarProperty Name="rfDate" ColumnName="rfDate" />
+                <ScalarProperty Name="rfLocation" ColumnName="rfLocation" />
+                <ScalarProperty Name="rfValue" ColumnName="rfValue" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblRoadNames">
+            <EntityTypeMapping TypeName="TrafficReportModel.tblRoadName">
+              <MappingFragment StoreEntitySet="tblRoadNames">
+                <ScalarProperty Name="rnID" ColumnName="rnID" />
+                <ScalarProperty Name="rnRoadName" ColumnName="rnRoadName" />
+                <ScalarProperty Name="rnLocation" ColumnName="rnLocation" />
+                <ScalarProperty Name="rnSpeedLimit" ColumnName="rnSpeedLimit" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblTrafficAccidents">
+            <EntityTypeMapping TypeName="TrafficReportModel.tblTrafficAccident">
+              <MappingFragment StoreEntitySet="tblTrafficAccidents">
+                <ScalarProperty Name="taID" ColumnName="taID" />
+                <ScalarProperty Name="taDateTime" ColumnName="taDateTime" />
+                <ScalarProperty Name="taRoadName" ColumnName="taRoadName" />
+                <ScalarProperty Name="taLat" ColumnName="taLat" />
+                <ScalarProperty Name="taLong" ColumnName="taLong" />
+                <ScalarProperty Name="taDescription" ColumnName="taDescription" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblTrafficSpeeds">
+            <EntityTypeMapping TypeName="TrafficReportModel.tblTrafficSpeed">
+              <MappingFragment StoreEntitySet="tblTrafficSpeeds">
+                <ScalarProperty Name="tsID" ColumnName="tsID" />
+                <ScalarProperty Name="tsDateTime" ColumnName="tsDateTime" />
+                <ScalarProperty Name="tsRoadName" ColumnName="tsRoadName" />
+                <ScalarProperty Name="tsMinSpeed" ColumnName="tsMinSpeed" />
+                <ScalarProperty Name="tsMaxSpeed" ColumnName="tsMaxSpeed" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

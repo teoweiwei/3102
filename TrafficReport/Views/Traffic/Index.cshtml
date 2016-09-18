@@ -1,0 +1,281 @@
+﻿@model IEnumerable<TrafficReport.Models.QueryViewModel>
+@{
+    ViewBag.Title = "Search";
+}
+@using System.Web.Script.Serialization;
+@using System.Collections.Generic;
+@using Newtonsoft.Json;
+
+<!-- FORM CONTAINER -->
+
+    <div class="container">
+
+        <div class="row">
+            <!-- Form -->
+            <div class="col-md-8">
+                @using (Html.BeginForm("HandleForm", "Traffic", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+        <!-- Form Region RoadName-->
+                    <h1><b>Traffic Report</b></h1>
+
+                    <div class="form-group">
+                        <div class="form-inline">
+
+                            <label class="col-sm-3 col-md-3">Regions :</label>
+                            <div class="col-sm-3 col-md-3">
+                                @Html.DropDownList("regions", null, new { onchange = "this.form.submit()" })
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-inline">
+
+                            <label class="col-sm-3 col-md-3">Road Name :</label>
+                            <div class="col-sm-3 col-md-3">
+                                @Html.DropDownList("roadNames")
+                            </div>
+
+                        </div>
+                    </div>
+
+            <!-- Radio Button-->
+                    <div class="form-group">
+                        <div class="form-inline">
+
+                            <label class="col-sm-3">Period :</label>
+
+                            <div class="col-sm-8">
+                                <label class="radio-inline">
+                                    @Html.RadioButton("period", "1month", true) 1-Month
+                                </label>
+                                <label class="radio-inline">
+                                    @Html.RadioButton("period", "3month", false) 3-Months
+                                </label>
+                                <label class="radio-inline">
+                                    @Html.RadioButton("period", "6month", false) 6-Months
+                                </label>
+                                <label class="radio-inline">
+                                    @Html.RadioButton("period", "1year", false) 1-Year
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+
+            <!--Inline the radio buttons -->
+                    <div class="form-group">
+                        <div class="form-inline">
+
+                            <label class="col-sm-3 ">Report type :</label>
+
+                            <div class="col-sm-8">
+                                <label class="radio-inline">
+                                    @Html.RadioButton("reportType", "accident", true) Accidents
+                                </label>
+                                <label class="radio-inline">
+                                    @Html.RadioButton("reportType", "congestion", false) Congestions
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+            <!-- Search Button-->
+
+                        <button class="btn btn-primary" type="submit" value="Search"> Search</button>
+
+
+        }
+            </div>
+
+
+
+            <!-- ######################################################################## -->
+            
+            <br />
+
+
+
+        </div>
+    </div>
+
+    <!-- ######################################################################## -->
+
+    <br />
+    <br />
+
+    <!-- TABLE -->
+    <div style="padding-left:80px; padding-right:80px">
+        <hr />
+
+        <div class="row">
+            <div class="col-md-5">
+                <!-- Table for Accident Data -->
+                @if (!Model.Any())
+            { }
+            else if (ViewBag.reportType == "accident")
+            {
+        <!-- ACCIDENT -->
+
+        <!-- TABLE ITSELF-->
+
+                    <table class="table table-condensed table-hover">
+
+                        <tr class="warning">
+                            <th>Road Name</th>
+                            <th>Date</th>
+                            <th>Rainfall Value</th>
+                            <th>Number of Accidents </th>
+                        </tr>
+
+                        @{foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.roadName</td>
+
+                                    <td>
+                                        @if (ViewBag.period == "1year" || ViewBag.period == "3month" || ViewBag.period == "6month")
+                                        {
+                                            // Convert the Month Format
+                                            string[] strMonth = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+                                            item.monthName = strMonth[item.date - 1];
+                                            // Display Month Name
+                                            @item.monthName
+                                        }
+                                        else if (ViewBag.period == "1month")
+                                        {
+                                            @item.date
+                                        }
+                                    </td>
+
+                                    <td>@item.rainfall</td>
+
+                                    <td>@item.number</td>
+                                </tr>
+                            }
+
+                        }
+
+                    </table>
+
+
+
+
+                            }
+                            else if (ViewBag.reportType == "congestion")
+                            {
+        <!-- CONGESTION -->
+
+
+        <!-- TABLE ITSELF-->
+
+                                <table class="table table-condensed table-hover">
+                                    <tr class="warning">
+                                        <th>Road Name</th>
+                                        <th>DateTime</th>
+                                        <th>Rainfall Value</th>
+                                        <th>Average Speed</th>
+                                    </tr>
+
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@item.roadName</td>
+
+                                            <td>
+                                                @if (ViewBag.period == "1year" || ViewBag.period == "3month" || ViewBag.period == "6month")
+                                                {
+                                                    // Convert the Month Format
+                                                    string[] strMonth = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+                                                    item.monthName = strMonth[item.date - 1];
+                                                    // Display Month Name
+                                                    @item.monthName
+                                                }
+                                                else if (ViewBag.period == "1month")
+                                                {
+                                                    @item.date
+                                                }
+                                            </td>
+
+                                            <td>@item.rainfall</td>
+
+                                            <td>@item.number</td>
+                                        </tr>
+                                    }
+                                </table>
+
+
+
+                            }
+            </div>
+
+            <!-- Bar chart -->
+            <div class="col-md-6">
+                @if (!Model.Any())
+                { }
+                else
+                {
+                        <!-- SCRIPT DATA AND DRAW CHART-->
+                    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+                        <script type="text/javascript">
+                            function DrawChart(x) {
+                                google.charts.load('current', { 'packages': ['bar'] });
+                                google.charts.setOnLoadCallback(drawChart);
+                                function drawChart() {
+
+                                    var data = new google.visualization.DataTable();
+                                    data.addColumn('string', 'Date');
+                                    data.addColumn('number', 'Rain Fall Value');
+                                    data.addColumn('number', x);
+
+                                    @foreach (var item in Model)
+                                    {
+                                        if (item != null)
+                                        {
+                                            if (item.date < 13)
+                                            {
+                                                string[] strMonth = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+                                                item.monthName = strMonth[item.date - 1];
+                                                @: data.addRow(["@item.monthName", @item.rainfall, @item.number]);
+                                            }
+                                            else {
+                                                @: data.addRow(["@item.date/3/2016", @item.rainfall, @item.number]);
+
+                                            }
+                                        }
+                                    }
+
+                                    var options = {
+                                        bars: 'horizontal', // Required for Material Bar Charts.
+                                        bar: { groupWidth: "75%" }
+                                    };
+
+                                    var chart = new google.charts.Bar(document.getElementById('barchart_material'));
+                                    chart.draw(data, options);
+                                }
+                            }
+                        </script>
+
+                    if (ViewBag.reportType == "accident")
+                    {
+                        <script>var x = "Number of Accidents";</script>
+                    }
+                    else
+                    {
+                        <script>var x = "Average Speed";</script>
+                    }
+
+                    <div id="barchart_material" class="col-md-6" style="width: 630px; height: 400px;">
+                        <script>DrawChart(x);</script>
+                    </div>
+
+                }
+
+            </div>
+
+        </div>
+
+       
+    </div>
+

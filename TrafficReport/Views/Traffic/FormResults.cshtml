@@ -1,0 +1,65 @@
+﻿@model IEnumerable<TrafficReport.Models.myViewModel>
+
+@*@model System.Data.Entity.Infrastructure.DbQuery<TrafficReport.Models.myViewModel>*@
+@{
+    ViewBag.Title = "FormResults";
+}
+
+<h2>FormResults</h2>
+
+
+@Html.Encode(ViewData["regions"])
+@Html.Encode(ViewData["roadNames"])
+
+@Html.Encode(ViewData["period"])
+@Html.Encode(ViewData["reportType"])
+@Html.Encode(ViewData["date"])
+@Html.Encode(ViewData["testdate"])
+
+
+
+<dl class="dl-horizontal">
+    <dt>
+
+    </dt>
+
+
+
+</dl>
+<table border="1">
+    <tr>
+        <th>Road Name</th>
+        <th>Accident Date</th>
+        <th>Rainfall Date</th>
+        
+        <th>Rainfall Value</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+
+
+        <tr>
+            <td>
+                @item.tblRoadName.rnRoadName
+            </td>
+
+            <td>@item.tblTrafficAccident.taDateTime.ToString("dd/MM/yyyy")</td>
+            <td>@item.tblRainfall.rfDate.ToString("dd/MM/yyyy")</td>
+
+            <td>@item.tblRainfall.rfValue</td>
+
+            
+        </tr>
+        
+    }
+        
+    </table>
+
+@*<div>@item.tblRoadName.rnRoadName</div>
+    <div>@item.tblTrafficAccident.taID</div>
+    <div>@item.tblTrafficAccident.taDateTime</div>
+    <div>@item.tblRainfall.rfDate</div>
+    <div>@item.tblRainfall.rfValue</div>*@
+
+
+
