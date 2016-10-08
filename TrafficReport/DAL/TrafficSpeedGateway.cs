@@ -33,7 +33,7 @@ namespace TrafficReport.DAL
                     speedData.tsRoadName = roadID;
                     speedData.tsDateTime = DateTime.Now;
                     speedData.tsMinSpeed = dataList[i].MinimumSpeed;
-                    speedData.tsMaxSpeed = dataList[i].MaximumSpeed;
+                    speedData.tsMaxSpeed = dataList[i].MaximumSpeed == 300? 90: dataList[i].MaximumSpeed;
 
                     Insert(speedData);
                     savedSpeedData.Add(speedData);
