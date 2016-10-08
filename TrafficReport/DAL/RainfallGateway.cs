@@ -41,8 +41,9 @@ namespace TrafficReport.DAL
                         rainfallData.rfDate = DateTime.ParseExact(row[3] + "/" + row[2] + "/" + row[1], "d/M/yyyy", CultureInfo.InvariantCulture);
                         rainfallData.rfLocation = locationId;
 
+                        decimal tryParse;
                         //Insert value as 0 if no rainfall value else get actual value
-                        if(row[4].Equals("-"))
+                        if(!decimal.TryParse(row[4], out tryParse))
                         {
                             rainfallData.rfValue = 0;
                         }
