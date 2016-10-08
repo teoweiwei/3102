@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="79847d5203c049cfa8d067b25e593b3f" Name="Diagram1">
+      <Diagram DiagramId="35c5e328f1fd4748bc4e2f18a2e1cd63" Name="Diagram1">
         <EntityTypeShape EntityType="TrafficReportDBModel.tblLocationName" Width="1.5" PointX="0.75" PointY="4" IsExpanded="true" />
         <EntityTypeShape EntityType="TrafficReportDBModel.tblRainfall" Width="1.5" PointX="3" PointY="1.25" IsExpanded="true" />
         <EntityTypeShape EntityType="TrafficReportDBModel.tblRoadName" Width="1.5" PointX="3" PointY="5.375" IsExpanded="true" />

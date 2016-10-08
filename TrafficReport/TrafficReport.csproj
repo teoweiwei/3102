@@ -164,21 +164,6 @@
     <Compile Include="Models\tblTrafficSpeed.cs">
       <DependentUpon>TrafficReportModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\TrafficAccidentModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TrafficAccidentModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\TrafficAccidentModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TrafficAccidentModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\TrafficAccidentModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TrafficAccidentModel.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Models\TrafficReportModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -208,16 +193,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Models\TrafficAccidentModel.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>TrafficAccidentModel.edmx</DependentUpon>
-      <LastGenOutput>TrafficAccidentModel.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\TrafficAccidentModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>TrafficAccidentModel.edmx</DependentUpon>
-      <LastGenOutput>TrafficAccidentModel.cs</LastGenOutput>
-    </Content>
     <Content Include="Models\TrafficReportModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>TrafficReportModel.edmx</DependentUpon>
@@ -230,13 +205,6 @@
     </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Models\TrafficAccidentModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>TrafficAccidentModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\TrafficAccidentModel.edmx.diagram">
-      <DependentUpon>TrafficAccidentModel.edmx</DependentUpon>
-    </Content>
     <EntityDeploy Include="Models\TrafficReportModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>TrafficReportModel.Designer.cs</LastGenOutput>

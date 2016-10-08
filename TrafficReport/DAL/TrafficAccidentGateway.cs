@@ -30,9 +30,9 @@ namespace TrafficReport.DAL
                     {
                         //Create model can assign value to respective fields
                         tblTrafficAccident accidentData = new tblTrafficAccident();
-                        accidentData.taID = dataList[i].IncidentID;
+                        //accidentData.taID = dataList[i].IncidentID;
                         accidentData.taDescription = dataList[i].Message;
-                        accidentData.taDateTime = dataList[i].CreateDate.AddHours(8);
+                        accidentData.taDateTime = DateTime.Now;
                         accidentData.taLat = dataList[i].Latitude;
                         accidentData.taLong = dataList[i].Longitude;
 

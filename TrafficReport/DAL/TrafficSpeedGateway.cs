@@ -22,7 +22,7 @@ namespace TrafficReport.DAL
             for (int i = 0; i < dataList.Count(); i++)
             {
                 //Check if current record in a vaild road to be saved
-                int roadID = dataList[i].LinkID;
+                int roadID = Convert.ToInt32(dataList[i].LinkID);
                 Boolean isValid = validRoadNameList.Where(d => d.rnID == roadID).ToList().Count() > 0;
 
                 //Save traffic speed record which is inside the valid list
@@ -31,7 +31,7 @@ namespace TrafficReport.DAL
                     //Create model can assign value to respective fields
                     tblTrafficSpeed speedData = new tblTrafficSpeed();
                     speedData.tsRoadName = roadID;
-                    speedData.tsDateTime = dataList[i].CreateDate;
+                    speedData.tsDateTime = DateTime.Now;
                     speedData.tsMinSpeed = dataList[i].MinimumSpeed;
                     speedData.tsMaxSpeed = dataList[i].MaximumSpeed;
 

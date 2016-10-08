@@ -1,6 +1,6 @@
 ﻿-- Creating table 'tblTrafficAccidents'
 CREATE TABLE [dbo].[tblTrafficAccidents] (
-    [taID] int  NOT NULL,
+    [taID] int  NOT NULL IDENTITY,
     [taDateTime] datetime  NOT NULL,
     [taRoadName] int  NULL,
     [taLat] float  NULL,

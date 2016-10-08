@@ -19,13 +19,13 @@ namespace TrafficReport.DAL
             {
                 //Create model can assign value to respective fields
                 tblRoadName roadName = new tblRoadName();
-                roadName.rnID = dataList[i].LinkID;
+                roadName.rnID = Convert.ToInt32(dataList[i].LinkID);
                 roadName.rnRoadName = dataList[i].RoadName;
                 roadName.rnLocation = GetNearestLocation(dataList[i].Location);
                 roadName.rnSpeedLimit = GetRoadSpeedLimit(dataList[i].RoadCategory);
 
                 //Check whether road name and ID exist in the database
-                Boolean checkIDNotExist = SelectById(dataList[i].LinkID) == null;
+                Boolean checkIDNotExist = SelectById(Convert.ToInt32(dataList[i].LinkID)) == null;
                 Boolean checkRoadNameNotExist = data.Where(m => m.rnRoadName.ToLower().Equals(roadName.rnRoadName.ToLower())).ToList().Count() == 0;
 
                 //Save road name if no record exist in database
@@ -89,11 +89,11 @@ namespace TrafficReport.DAL
         //Return speed limit for input road name category 
         private int GetRoadSpeedLimit(string roadCategory)
         {
-            if (roadCategory.Equals("A "))
+            if (roadCategory.Equals("A"))
             {
                 return 90;
             }
-            else if (roadCategory.Equals("B "))
+            else if (roadCategory.Equals("B"))
             {
                 return 70;
             }

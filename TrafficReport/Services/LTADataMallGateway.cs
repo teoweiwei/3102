@@ -12,8 +12,8 @@ namespace TrafficReport.Services
     //Service gateway to access LTADataMall web service
     public class LTADataMallGateway : ILTADataMallGateway
     {
-        private const string ACCIDENT_URL = "http://datamall.mytransport.sg/ltaodataservice.svc/IncidentSet";
-        private const string SPEED_URL = "http://datamall.mytransport.sg/ltaodataservice.svc/TrafficSpeedBandSet";
+        private const string ACCIDENT_URL = "http://datamall2.mytransport.sg/ltaodataservice/TrafficIncidents";
+        private const string SPEED_URL = "http://datamall2.mytransport.sg/ltaodataservice/TrafficSpeedBands";
         private const string ACCOUNT_KEY = "73yoKcEiJDZCbxL3KOxLJw==";
         private const string UNIQUE_USER_ID = "4eab90a3-02d5-4362-8dc5-0cc5f32325b0";
 
@@ -24,7 +24,7 @@ namespace TrafficReport.Services
             LTADataMallModel.LTADataMallAccidentData ltaDataMallAccidentData = JsonConvert.DeserializeObject<LTADataMallModel.LTADataMallAccidentData>(LTADataMallRequest(ACCIDENT_URL));
 
             //Return data model list
-            return ltaDataMallAccidentData.d;
+            return ltaDataMallAccidentData.value;
         }
 
         //Request web service for traffic speed and road name data
@@ -40,15 +40,15 @@ namespace TrafficReport.Services
             do
             {
                 //Append new data into model
-                for (int i = 0; i < ltaDataMallSpeedBandData.d.Count(); i++)
+                for (int i = 0; i < ltaDataMallSpeedBandData.value.Count(); i++)
                 {
-                    speedData.Add(ltaDataMallSpeedBandData.d[i]);
+                    speedData.Add(ltaDataMallSpeedBandData.value[i]);
                 }
 
                 skipCount += 50;
                 ltaDataMallSpeedBandData = JsonConvert.DeserializeObject<LTADataMallModel.LTADataMallSpeedBandData>(LTADataMallRequest(SPEED_URL + "?$skip=" + skipCount.ToString()));
-
-            } while (skipCount < 150/*ltaDataMallSpeedBandData.d.Count != 0*/);
+                Console.WriteLine(skipCount);
+            } while (ltaDataMallSpeedBandData.value.Count != 0);
 
             //Return data model
             return speedData;
