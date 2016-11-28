@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Web.Mvc;
 using TrafficReport.DAL;
 using TrafficReport.Models;
@@ -13,6 +14,8 @@ namespace TrafficReport.Controllers
         private TrafficSpeedGateway trafficSpeedGateway = new TrafficSpeedGateway();
         private RoadNameGateway roadNameGateway = new RoadNameGateway();
         private ILTADataMallGateway ltaDataMallGateway = new LTADataMallGateway();
+
+        Stopwatch responseTimeDuration;
 
         //Index page
         public ActionResult index()
@@ -32,11 +35,16 @@ namespace TrafficReport.Controllers
 
         public ActionResult GetSpeedData()
         {
+            responseTimeDuration = Stopwatch.StartNew();
+
             //Request for speed data from LTA web service
             List<LTADataMallModel.SpeedData> speedData = ltaDataMallGateway.GetLTASpeedData();
 
+            responseTimeDuration.Stop();
+            Debug.WriteLine("Total time response time : \t" + responseTimeDuration.Elapsed.ToString(@"hh\:mm\:ss"));
+
             //Save the retrieved records into database and display the listing to the view
-            return View("SavedSpeedList", trafficSpeedGateway.SaveSpeedData(speedData));
+            return View("SavedSpeedList", trafficSpeedGateway.SaveSpeedData(speedData));            
         }
 
         public ActionResult GetRoadNameData()

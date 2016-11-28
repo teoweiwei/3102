@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -17,6 +18,8 @@ namespace TrafficReport.Services
         private const string ACCOUNT_KEY = "73yoKcEiJDZCbxL3KOxLJw==";
         private const string UNIQUE_USER_ID = "4eab90a3-02d5-4362-8dc5-0cc5f32325b0";
 
+        Stopwatch webServiceJSONDuration;
+
         //Request web service for traffic accident data
         public List<LTADataMallModel.AccidentData> GetLTAAccidentData()
         {
@@ -30,6 +33,8 @@ namespace TrafficReport.Services
         //Request web service for traffic speed and road name data
         public List<LTADataMallModel.SpeedData> GetLTASpeedData()
         {
+            webServiceJSONDuration = Stopwatch.StartNew();
+
             List<LTADataMallModel.SpeedData> speedData = new List<LTADataMallModel.SpeedData>();
             int skipCount = 0;
 
@@ -50,6 +55,9 @@ namespace TrafficReport.Services
                 Console.WriteLine(skipCount);
             } while (ltaDataMallSpeedBandData.value.Count != 0);
 
+            webServiceJSONDuration.Stop();
+            Debug.WriteLine("Total time to receive web service data from LTA : \t" + webServiceJSONDuration.Elapsed.ToString(@"hh\:mm\:ss"));
+
             //Return data model
             return speedData;
         }
@@ -64,7 +72,7 @@ namespace TrafficReport.Services
                 //Setting up HTTP request message
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
                 request.Headers.Add("AccountKey", ACCOUNT_KEY);
-                request.Headers.Add("UniqueUserID", UNIQUE_USER_ID);
+                //request.Headers.Add("UniqueUserID", UNIQUE_USER_ID);
                 request.Accept = "application/json";
                 request.ContentType = "application/x-www-form-urlencoded";
                 request.ContentLength = 0;

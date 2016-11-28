@@ -11,8 +11,8 @@ namespace TrafficReport.Models
             public string RoadName { get; set; }
             public string RoadCategory { get; set; }
             public int SpeedBand { get; set; }
-            public int MinimumSpeed { get; set; }
-            public int MaximumSpeed { get; set; }
+            public string MinimumSpeed { get; set; }
+            public string MaximumSpeed { get; set; }
             public string Location { get; set; }
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
 using TrafficReport.Models;
 
@@ -9,36 +10,67 @@ namespace TrafficReport.DAL
     //This gateway perform database operation on tblTrafficSpeed table
     public class TrafficSpeedGateway : DataGateway<tblTrafficSpeed>
     {
+        Stopwatch saveSpeedDataDuration;
+        Stopwatch queryDuration;
+        Stopwatch individualRecordDuration;
+        Stopwatch isValidDuration;
+
         //Save traffic speed data into database
         public List<tblTrafficSpeed> SaveSpeedData(List<LTADataMallModel.SpeedData> dataList)
         {
+            Debug.WriteLine("=====Start Saving Speed Data Process=====\nNumber of records received: \t" + dataList.Count());
+            saveSpeedDataDuration = Stopwatch.StartNew();
+
             //List of successfully saved records
             List<tblTrafficSpeed> savedSpeedData = new List<tblTrafficSpeed>();
 
             //List of road name traffic speed data to be saved. Road name with location ID assigned will be saved for this scope of project, else all Singapore's road speed date will be saved
-            IQueryable<tblRoadName> validRoadNameList = db.tblRoadNames.Where(l => l.rnLocation != null);
+            //IQueryable<tblRoadName> validRoadNameList = db.tblRoadNames.Where(l => l.rnLocation != null);
 
             //Loop to save each record
             for (int i = 0; i < dataList.Count(); i++)
             {
+                individualRecordDuration = Stopwatch.StartNew();
+
                 //Check if current record in a vaild road to be saved
                 int roadID = Convert.ToInt32(dataList[i].LinkID);
-                Boolean isValid = validRoadNameList.Where(d => d.rnID == roadID).ToList().Count() > 0;
+                //Boolean isValid = validRoadNameList.Where(d => d.rnID == roadID).ToList().Count() > 0;
+
+                queryDuration = Stopwatch.StartNew();
+                Boolean isValid = db.tblRoadNames.Where(m => m.rnID == roadID).ToList().Count() > 0;
+
+                queryDuration.Stop();
+                Debug.WriteLine("Query process duration(ms): \t\t" + queryDuration.ElapsedMilliseconds);
 
                 //Save traffic speed record which is inside the valid list
-                if(isValid)
+                if (isValid)
                 {
+                    isValidDuration = Stopwatch.StartNew();
+
                     //Create model can assign value to respective fields
                     tblTrafficSpeed speedData = new tblTrafficSpeed();
                     speedData.tsRoadName = roadID;
                     speedData.tsDateTime = DateTime.Now;
-                    speedData.tsMinSpeed = dataList[i].MinimumSpeed;
-                    speedData.tsMaxSpeed = dataList[i].MaximumSpeed == 300? 90: dataList[i].MaximumSpeed;
+                    speedData.tsMinSpeed = Int32.Parse(dataList[i].MinimumSpeed);
+                    speedData.tsMaxSpeed = Int32.Parse(dataList[i].MaximumSpeed) == 300? 90: Int32.Parse(dataList[i].MaximumSpeed);
 
                     Insert(speedData);
                     savedSpeedData.Add(speedData);
+
+                    isValidDuration.Stop();
+                    Debug.WriteLine("Record " + i + " saving record into DB process duration(ms): \t" + isValidDuration.ElapsedMilliseconds);
                 }
+                else
+                {
+                    Debug.WriteLine("Record " + i + " Not valid: \t" + 0);
+                }
+
+                individualRecordDuration.Stop();
+                Debug.WriteLine("Record " + i + " individual total process duration(ms): \t\t\t" + individualRecordDuration.ElapsedMilliseconds);
             }
+
+            saveSpeedDataDuration.Stop();
+            Debug.WriteLine("Total time duration taken to save all records: \t" + saveSpeedDataDuration.Elapsed.ToString(@"hh\:mm\:ss"));
 
             //Return the list of saved records
             return savedSpeedData;
